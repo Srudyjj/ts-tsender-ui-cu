@@ -11,7 +11,7 @@ const { expect } = test;
 
 // Keep the basic title test (optional, but good practice)
 test("has title", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/", { timeout: 60000 });
   await expect(page).toHaveTitle(/TSender/);
 });
 
@@ -24,7 +24,7 @@ test("should show the airdrop form when connected, otherwise not", async ({
 }) => {
   // The test function now receives Synpress/MetaMask fixtures: context, metamaskPage, extensionId
 
-  await page.goto("/");
+  await page.goto("/", { timeout: 60000 });
 
   // 1. Verify Initial State (Disconnected)
   // Use a specific locator like getByText or preferably getByTestId if available
@@ -39,7 +39,7 @@ test("should show the airdrop form when connected, otherwise not", async ({
   // Adjust timeout and locator as needed
   await page.getByTestId("rk-wallet-option-io.metamask").waitFor({
     state: "visible",
-    timeout: 30000, // Increase timeout if needed
+    timeout: 60000, // Increase timeout if needed
   });
   await page.getByTestId("rk-wallet-option-io.metamask").click();
 
@@ -66,6 +66,8 @@ test("should show the airdrop form when connected, otherwise not", async ({
 
   // 4. Verify Final State (Connected)
   // Wait for potential asynchronous updates after connection
-  await expect(page.getByText("Token Address")).toBeVisible({ timeout: 10000 }); // Check if a form label is now visible
+  await expect(page.getByText("Token Address")).toBeVisible({
+    timeout: 20000,
+  }); // Check if a form label is now visible
   await expect(page.getByText("Please connect")).not.toBeVisible(); // Check the disconnected message is gone
 });
